@@ -30,6 +30,7 @@ class AIModelBase(BaseModel):
     accuracy_score: float = 0.90
     confidence_score: float = 0.88
     reliability_score: float = 0.92
+    cost_per_request: float = 0.010
     latency_ms: int = 600
     status: str = "Active"
     total_decisions: int = 0
@@ -43,6 +44,7 @@ class AIModelUpdate(BaseModel):
     accuracy_score: Optional[float] = None
     confidence_score: Optional[float] = None
     reliability_score: Optional[float] = None
+    cost_per_request: Optional[float] = None
     latency_ms: Optional[int] = None
     status: Optional[str] = None
 
@@ -64,6 +66,7 @@ class ModelResponseItemBase(BaseModel):
 
 class ModelResponseItemResponse(ModelResponseItemBase):
     model_name: Optional[str] = None
+    cost_per_request: Optional[float] = 0.010
     class Config:
         from_attributes = True
 
@@ -99,10 +102,11 @@ class ArbitrationPolicyBase(BaseModel):
     is_active: bool = False
     min_confidence_threshold: float = 0.75
     consensus_required: bool = False
-    weight_reliability: float = 0.35
-    weight_confidence: float = 0.30
-    weight_accuracy: float = 0.20
+    weight_reliability: float = 0.30
+    weight_confidence: float = 0.25
+    weight_accuracy: float = 0.15
     weight_consensus: float = 0.15
+    weight_cost: float = 0.15
 
 class ArbitrationPolicyCreate(ArbitrationPolicyBase):
     pass
@@ -115,6 +119,7 @@ class ArbitrationPolicyUpdate(BaseModel):
     weight_confidence: Optional[float] = None
     weight_accuracy: Optional[float] = None
     weight_consensus: Optional[float] = None
+    weight_cost: Optional[float] = None
 
 class ArbitrationPolicyResponse(ArbitrationPolicyBase):
     id: int
@@ -126,8 +131,16 @@ class ArbitrationPolicyResponse(ArbitrationPolicyBase):
 class FinalDecisionResult(BaseModel):
     request_id: str
     final_decision: str
-    winning_model: Optional[str]
-    winning_model_id: Optional[str]
+    winning_model: Optional[str] = None # Final policy-selected winner name
+    winning_model_id: Optional[str] = None # Final policy-selected winner ID
+    weighted_score_winner: Optional[str] = None
+    weighted_score_winner_id: Optional[str] = None
+    policy_selected_winner: Optional[str] = None
+    policy_selected_winner_id: Optional[str] = None
+    selection_method: str = "Weighted Scoring"
+    policy_override: bool = False
+    override_reason: Optional[str] = None
+    total_cost: float = 0.0
     arbitration_score: float
     confidence: float
     risk_level: str
@@ -179,9 +192,15 @@ class AuditLogResponseItem(BaseModel):
     policy_used: str
     scores: str
     final_decision: str
-    winning_model: Optional[str]
+    winning_model: Optional[str] = None
+    weighted_score_winner: Optional[str] = None
+    policy_selected_winner: Optional[str] = None
+    selection_method: Optional[str] = None
+    policy_override: bool = False
+    override_reason: Optional[str] = None
+    risk_level: Optional[str] = None
     human_review: bool
-    reviewer: Optional[str]
+    reviewer: Optional[str] = None
     reason: str
     class Config:
         from_attributes = True

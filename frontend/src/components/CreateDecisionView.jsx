@@ -276,13 +276,39 @@ export default function CreateDecisionView({ activePolicy, onArbitrationDone }) 
               </div>
 
               {/* 2. Arbitration Analysis */}
-              <div className="p-4 bg-gray-900/80 rounded-xl border border-gray-800 space-y-2 text-xs">
+              <div className="p-4 bg-gray-900/80 rounded-xl border border-gray-800 space-y-3 text-xs">
                 <h4 className="font-bold text-cyan-400 uppercase tracking-wider">2. Arbitration Analysis Breakdown</h4>
+                
+                {/* Winner Breakdown Box */}
+                <div className="p-3 bg-gray-950/60 rounded-lg border border-gray-800 grid grid-cols-1 sm:grid-cols-2 gap-3">
+                  <div className="space-y-1">
+                    <span className="text-[11px] text-gray-400 uppercase tracking-wider font-semibold">Weighted Score Winner (Highest Raw Score)</span>
+                    <div className="font-bold text-cyan-300 text-sm">{result.arbitration_result.weighted_score_winner || result.arbitration_result.winning_model || "None"}</div>
+                  </div>
+                  <div className="space-y-1">
+                    <span className="text-[11px] text-gray-400 uppercase tracking-wider font-semibold">Policy Selected Winner (Governance Outcome)</span>
+                    <div className="font-bold text-purple-300 text-sm">{result.arbitration_result.policy_selected_winner || result.arbitration_result.winning_model || "None"}</div>
+                  </div>
+                </div>
+
+                {/* Policy Override Banner if applicable */}
+                {result.arbitration_result.policy_override && (
+                  <div className="p-3 bg-purple-950/60 border border-purple-800/80 rounded-lg text-purple-200 space-y-1">
+                    <div className="font-bold flex items-center gap-1.5 text-xs">
+                      <ShieldCheck className="w-4 h-4 text-purple-400" />
+                      <span>POLICY OVERRIDE DETECTED</span>
+                    </div>
+                    <p className="text-[11px] text-purple-300/90 leading-relaxed">
+                      {result.arbitration_result.override_reason}
+                    </p>
+                  </div>
+                )}
+
                 <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-1 text-gray-300">
                   <div>Agreement: <b className="text-gray-100">{result.arbitration_result.agreement_level}</b></div>
                   <div>Arbitration Score: <b className="text-cyan-400">{result.arbitration_result.arbitration_score} / 100</b></div>
-                  <div>Risk Tier: <b className="text-amber-400">{result.risk_level}</b></div>
-                  <div>Policy: <b className="text-gray-200">{result.arbitration_result.policy_used}</b></div>
+                  <div>Total Cost: <b className="text-emerald-400">${(result.arbitration_result.total_cost || 0.043).toFixed(4)}</b></div>
+                  <div>Selection: <b className="text-purple-300">{result.arbitration_result.selection_method || "Weighted Scoring"}</b></div>
                 </div>
               </div>
 
@@ -296,7 +322,7 @@ export default function CreateDecisionView({ activePolicy, onArbitrationDone }) 
               }`}>
                 <div className="flex flex-wrap items-center justify-between gap-4">
                   <div>
-                    <div className="text-xs font-bold uppercase tracking-widest text-gray-400">Final Arbitration Decision</div>
+                    <div className="text-xs font-bold uppercase tracking-widest text-gray-400">Final Decision Outcome</div>
                     <div className="text-2xl font-black mt-1 flex items-center gap-3">
                       <span>{result.arbitration_result.final_decision}</span>
                       {result.arbitration_result.human_review_required && (
@@ -308,8 +334,8 @@ export default function CreateDecisionView({ activePolicy, onArbitrationDone }) 
                   </div>
 
                   <div className="text-right text-xs space-y-1">
-                    {result.arbitration_result.winning_model && (
-                      <div>Winning Model: <b className="text-cyan-300">{result.arbitration_result.winning_model}</b></div>
+                    {result.arbitration_result.policy_selected_winner && (
+                      <div>Final Winner: <b className="text-cyan-300">{result.arbitration_result.policy_selected_winner}</b></div>
                     )}
                     <div>Overall Confidence: <b className="text-gray-100">{result.arbitration_result.confidence}%</b></div>
                     <div>Request ID: <b className="font-mono text-gray-300">{result.request_id}</b></div>
@@ -317,7 +343,7 @@ export default function CreateDecisionView({ activePolicy, onArbitrationDone }) 
                 </div>
 
                 <div className="mt-4 pt-3 border-t border-white/10 text-xs leading-relaxed opacity-90">
-                  <b>Explanation:</b> {result.arbitration_result.explanation}
+                  <b>Audit Rationale:</b> {result.arbitration_result.explanation}
                 </div>
               </div>
             </div>

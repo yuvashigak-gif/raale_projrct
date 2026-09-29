@@ -101,9 +101,9 @@ export default function DecisionHistoryView({ onSelectDecision }) {
                 <th className="p-3.5">Applicant</th>
                 <th className="p-3.5">Risk Tier</th>
                 <th className="p-3.5">Final Decision</th>
-                <th className="p-3.5">Winning Model</th>
-                <th className="p-3.5">Score</th>
-                <th className="p-3.5">Policy</th>
+                <th className="p-3.5">Selected Winner</th>
+                <th className="p-3.5">Total Cost</th>
+                <th className="p-3.5">Policy Override</th>
                 <th className="p-3.5">Submitted</th>
                 <th className="p-3.5 text-right">Actions</th>
               </tr>
@@ -131,9 +131,17 @@ export default function DecisionHistoryView({ onSelectDecision }) {
                     <td className="p-3.5">
                       <DecisionStatusBadge decision={item.final_decision} />
                     </td>
-                    <td className="p-3.5 text-gray-300 font-medium">{item.winning_model || "N/A (Review)"}</td>
-                    <td className="p-3.5 font-mono text-cyan-300">{item.arbitration_score ? `${item.arbitration_score}` : "-"}</td>
-                    <td className="p-3.5 text-gray-400 max-w-[140px] truncate">{item.policy_used || "Standard"}</td>
+                    <td className="p-3.5 text-gray-300 font-medium">{item.policy_selected_winner || item.winning_model || "N/A (Review)"}</td>
+                    <td className="p-3.5 font-mono text-emerald-400 font-bold">${(item.total_cost || 0.043).toFixed(4)}</td>
+                    <td className="p-3.5">
+                      {item.policy_override ? (
+                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-purple-950 text-purple-300 border border-purple-800">
+                          YES (OVERRIDE)
+                        </span>
+                      ) : (
+                        <span className="text-gray-500 text-[10px]">No</span>
+                      )}
+                    </td>
                     <td className="p-3.5 text-gray-500 text-[11px]">
                       {new Date(item.submitted_date).toLocaleDateString()}
                     </td>

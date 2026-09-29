@@ -1,7 +1,7 @@
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.database import engine, Base
-from app.routers import vendors, models, decisions, policies, audit, human_review, analytics, scenarios
+from app.routers import vendors, models, decisions, policies, audit, human_review, analytics, scenarios, experiment
 
 # Initialize DB tables
 Base.metadata.create_all(bind=engine)
@@ -30,6 +30,7 @@ app.include_router(audit.router)
 app.include_router(human_review.router)
 app.include_router(analytics.router)
 app.include_router(scenarios.router)
+app.include_router(experiment.router)
 
 @app.get("/")
 def root():

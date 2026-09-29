@@ -59,11 +59,14 @@ export default function DecisionDetailModal({ requestId, onClose }) {
                   <div key={i} className="p-3 bg-gray-900/80 rounded-xl border border-gray-800 space-y-1">
                     <div className="flex justify-between items-center">
                       <span className="font-bold text-gray-100">{resp.model_name} ({resp.vendor_name})</span>
-                      <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
-                        resp.decision === "APPROVE" ? "badge-approve" : resp.decision === "REJECT" ? "badge-reject" : "badge-review"
-                      }`}>
-                        {resp.decision} ({resp.confidence}%)
-                      </span>
+                      <div className="flex items-center space-x-3">
+                        <span className="text-emerald-400 font-mono font-bold">${(resp.cost_per_request || 0.010).toFixed(3)}</span>
+                        <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${
+                          resp.decision === "APPROVE" ? "badge-approve" : resp.decision === "REJECT" ? "badge-reject" : "badge-review"
+                        }`}>
+                          {resp.decision} ({resp.confidence}%)
+                        </span>
+                      </div>
                     </div>
                     <p className="text-gray-400 text-[11px]">"{resp.reasoning_summary}"</p>
                   </div>
@@ -73,19 +76,28 @@ export default function DecisionDetailModal({ requestId, onClose }) {
 
             {/* Final Decision Callout */}
             {detail.final_decision && (
-              <div className="p-5 rounded-2xl bg-cyan-950/30 border border-cyan-500/40 space-y-2">
+              <div className="p-5 rounded-2xl bg-cyan-950/30 border border-cyan-500/40 space-y-3">
                 <div className="flex justify-between items-center">
                   <div>
-                    <span className="text-[10px] font-bold text-gray-400 uppercase">Final Decision</span>
+                    <span className="text-[10px] font-bold text-gray-400 uppercase">Final Decision Outcome</span>
                     <div className="text-xl font-black text-emerald-400 mt-0.5">{detail.final_decision.final_decision}</div>
                   </div>
-                  <div className="text-right">
-                    <div>Winning Model: <b className="text-cyan-300">{detail.final_decision.winning_model || "None (Review)"}</b></div>
-                    <div>Score: <b className="text-cyan-400">{detail.final_decision.arbitration_score} / 100</b></div>
+                  <div className="text-right text-xs space-y-1">
+                    <div>Highest Score Winner: <b className="text-cyan-300">{detail.final_decision.weighted_score_winner || detail.final_decision.winning_model || "None"}</b></div>
+                    <div>Policy Selected Winner: <b className="text-purple-300">{detail.final_decision.policy_selected_winner || detail.final_decision.winning_model || "None"}</b></div>
+                    <div>Total Cost: <b className="text-emerald-400">${(detail.final_decision.total_cost || 0.043).toFixed(4)}</b></div>
                   </div>
                 </div>
+
+                {detail.final_decision.policy_override && (
+                  <div className="p-3 bg-purple-950/60 border border-purple-800/80 rounded-lg text-purple-200 space-y-1">
+                    <div className="font-bold text-xs">POLICY OVERRIDE APPLIED</div>
+                    <p className="text-[11px] text-purple-300/90">{detail.final_decision.override_reason}</p>
+                  </div>
+                )}
+
                 <div className="pt-2 border-t border-gray-800 text-gray-300">
-                  <b>Explanation:</b> {detail.final_decision.explanation}
+                  <b>Audit Rationale:</b> {detail.final_decision.explanation}
                 </div>
               </div>
             )}
@@ -96,6 +108,7 @@ export default function DecisionDetailModal({ requestId, onClose }) {
                 <div className="flex justify-between items-center text-gray-400 font-mono text-[11px]">
                   <span>Audit ID: <b className="text-cyan-300">{detail.audit.audit_id}</b></span>
                   <span>Policy: {detail.audit.policy_used}</span>
+                  <span>Selection: {detail.audit.selection_method || "Weighted Scoring"}</span>
                 </div>
               </div>
             )}

@@ -58,6 +58,7 @@ export default function ModelsView() {
                 <th className="p-3.5">Accuracy</th>
                 <th className="p-3.5">Reliability</th>
                 <th className="p-3.5">Confidence</th>
+                <th className="p-3.5">Cost / Req</th>
                 <th className="p-3.5">Avg Latency</th>
                 <th className="p-3.5">Status</th>
                 <th className="p-3.5 text-right">Actions</th>
@@ -65,7 +66,7 @@ export default function ModelsView() {
             </thead>
             <tbody className="divide-y divide-gray-800/60">
               {loading ? (
-                <tr><td colSpan={10} className="p-8 text-center text-gray-400">Loading AI models...</td></tr>
+                <tr><td colSpan={11} className="p-8 text-center text-gray-400">Loading AI models...</td></tr>
               ) : models.map((m) => (
                 <tr key={m.id} className="hover:bg-gray-800/40">
                   <td className="p-3.5 font-mono font-bold text-cyan-400">{m.model_id}</td>
@@ -75,6 +76,7 @@ export default function ModelsView() {
                   <td className="p-3.5 font-bold text-emerald-400">{(m.accuracy_score * 100).toFixed(0)}%</td>
                   <td className="p-3.5 font-bold text-cyan-400">{(m.reliability_score * 100).toFixed(0)}%</td>
                   <td className="p-3.5 text-purple-300">{(m.confidence_score * 100).toFixed(0)}%</td>
+                  <td className="p-3.5 font-mono text-emerald-300 font-bold">${(m.cost_per_request || 0.01).toFixed(3)}</td>
                   <td className="p-3.5 font-mono text-amber-400">{m.latency_ms} ms</td>
                   <td className="p-3.5">
                     <span className={`px-2 py-0.5 rounded text-[10px] font-bold ${

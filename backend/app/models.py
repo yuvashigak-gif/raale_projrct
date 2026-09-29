@@ -29,6 +29,7 @@ class AIModel(Base):
     accuracy_score = Column(Float, default=0.90) # 0.0 - 1.0
     confidence_score = Column(Float, default=0.88)
     reliability_score = Column(Float, default=0.92)
+    cost_per_request = Column(Float, default=0.010) # Monetary cost per request ($)
     latency_ms = Column(Integer, default=600)
     status = Column(String, default="Active") # Active, Disabled
     total_decisions = Column(Integer, default=0)
@@ -81,10 +82,11 @@ class ArbitrationPolicy(Base):
     is_active = Column(Boolean, default=False)
     min_confidence_threshold = Column(Float, default=0.75) # 0.0 - 1.0
     consensus_required = Column(Boolean, default=False)
-    weight_reliability = Column(Float, default=0.35)
-    weight_confidence = Column(Float, default=0.30)
-    weight_accuracy = Column(Float, default=0.20)
+    weight_reliability = Column(Float, default=0.30)
+    weight_confidence = Column(Float, default=0.25)
+    weight_accuracy = Column(Float, default=0.15)
     weight_consensus = Column(Float, default=0.15)
+    weight_cost = Column(Float, default=0.15)
     created_date = Column(DateTime, default=datetime.utcnow)
 
 class FinalDecision(Base):
@@ -93,8 +95,16 @@ class FinalDecision(Base):
     id = Column(Integer, primary_key=True, index=True)
     request_id = Column(String, ForeignKey("decision_requests.request_id"), unique=True, nullable=False)
     final_decision = Column(String, nullable=False) # APPROVE, REJECT, PENDING HUMAN REVIEW
-    winning_model_id = Column(String, nullable=True)
-    winning_model_name = Column(String, nullable=True)
+    winning_model_id = Column(String, nullable=True) # Policy selected winner ID
+    winning_model_name = Column(String, nullable=True) # Policy selected winner name
+    weighted_score_winner_id = Column(String, nullable=True)
+    weighted_score_winner_name = Column(String, nullable=True)
+    policy_selected_winner_id = Column(String, nullable=True)
+    policy_selected_winner_name = Column(String, nullable=True)
+    selection_method = Column(String, default="Weighted Scoring")
+    policy_override = Column(Boolean, default=False)
+    override_reason = Column(Text, nullable=True)
+    total_cost = Column(Float, default=0.0)
     arbitration_score = Column(Float, nullable=False)
     confidence = Column(Float, nullable=False)
     risk_level = Column(String, nullable=False)
@@ -120,6 +130,12 @@ class AuditLog(Base):
     scores = Column(Text, nullable=False) # JSON formatted string
     final_decision = Column(String, nullable=False)
     winning_model = Column(String, nullable=True)
+    weighted_score_winner = Column(String, nullable=True)
+    policy_selected_winner = Column(String, nullable=True)
+    selection_method = Column(String, nullable=True)
+    policy_override = Column(Boolean, default=False)
+    override_reason = Column(Text, nullable=True)
+    risk_level = Column(String, nullable=True)
     human_review = Column(Boolean, default=False)
     reviewer = Column(String, nullable=True)
     reason = Column(Text, nullable=False)

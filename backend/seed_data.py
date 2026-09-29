@@ -35,11 +35,11 @@ def seed_database():
 
     print("Seeding AI Models...")
     models_data = [
-        {"model_id": "M001", "model_name": "GPT-5.6", "vendor_id": "V001", "version": "v5.6-turbo", "accuracy_score": 0.95, "confidence_score": 0.92, "reliability_score": 0.94, "latency_ms": 820, "status": "Active"},
-        {"model_id": "M002", "model_name": "Claude Sonnet", "vendor_id": "V002", "version": "v3.7", "accuracy_score": 0.93, "confidence_score": 0.90, "reliability_score": 0.92, "latency_ms": 790, "status": "Active"},
-        {"model_id": "M003", "model_name": "Gemini", "vendor_id": "V003", "version": "v1.5-Pro", "accuracy_score": 0.91, "confidence_score": 0.87, "reliability_score": 0.89, "latency_ms": 640, "status": "Active"},
-        {"model_id": "M004", "model_name": "Azure AI Model", "vendor_id": "V004", "version": "v4.0", "accuracy_score": 0.89, "confidence_score": 0.85, "reliability_score": 0.88, "latency_ms": 710, "status": "Active"},
-        {"model_id": "M005", "model_name": "Command R+", "vendor_id": "V005", "version": "v2.1", "accuracy_score": 0.87, "confidence_score": 0.84, "reliability_score": 0.86, "latency_ms": 680, "status": "Active"},
+        {"model_id": "M001", "model_name": "GPT-5.6", "vendor_id": "V001", "version": "v5.6-turbo", "accuracy_score": 0.95, "confidence_score": 0.92, "reliability_score": 0.94, "cost_per_request": 0.020, "latency_ms": 820, "status": "Active"},
+        {"model_id": "M002", "model_name": "Claude Sonnet", "vendor_id": "V002", "version": "v3.7", "accuracy_score": 0.93, "confidence_score": 0.90, "reliability_score": 0.92, "cost_per_request": 0.015, "latency_ms": 790, "status": "Active"},
+        {"model_id": "M003", "model_name": "Gemini", "vendor_id": "V003", "version": "v1.5-Pro", "accuracy_score": 0.91, "confidence_score": 0.87, "reliability_score": 0.89, "cost_per_request": 0.008, "latency_ms": 640, "status": "Active"},
+        {"model_id": "M004", "model_name": "Azure AI Model", "vendor_id": "V004", "version": "v4.0", "accuracy_score": 0.89, "confidence_score": 0.85, "reliability_score": 0.88, "cost_per_request": 0.010, "latency_ms": 710, "status": "Active"},
+        {"model_id": "M005", "model_name": "Command R+", "vendor_id": "V005", "version": "v2.1", "accuracy_score": 0.87, "confidence_score": 0.84, "reliability_score": 0.86, "cost_per_request": 0.005, "latency_ms": 680, "status": "Active"},
     ]
 
     for m in models_data:
@@ -48,16 +48,16 @@ def seed_database():
 
     print("Seeding 10 Arbitration Policies...")
     policies_data = [
-        {"policy_id": "POL-001", "policy_name": "Majority Voting", "description": "Selects the decision supported by the highest number of participating AI models.", "is_active": False, "min_confidence_threshold": 0.70, "consensus_required": True, "weight_reliability": 0.20, "weight_confidence": 0.20, "weight_accuracy": 0.20, "weight_consensus": 0.40},
-        {"policy_id": "POL-002", "policy_name": "Weighted Confidence", "description": "Aggregates confidence scores for each decision choice and selects the highest cumulative confidence option.", "is_active": False, "min_confidence_threshold": 0.75, "consensus_required": False, "weight_reliability": 0.15, "weight_confidence": 0.55, "weight_accuracy": 0.15, "weight_consensus": 0.15},
-        {"policy_id": "POL-003", "policy_name": "Highest Reliability", "description": "Prioritizes the decision rendered by the AI model with the highest vendor reliability score.", "is_active": False, "min_confidence_threshold": 0.70, "consensus_required": False, "weight_reliability": 0.60, "weight_confidence": 0.20, "weight_accuracy": 0.10, "weight_consensus": 0.10},
-        {"policy_id": "POL-004", "policy_name": "Weighted Reliability + Confidence", "description": "Standard multi-factor algorithm balancing vendor reliability (35%), model confidence (30%), accuracy (20%), and consensus (15%).", "is_active": True, "min_confidence_threshold": 0.75, "consensus_required": False, "weight_reliability": 0.35, "weight_confidence": 0.30, "weight_accuracy": 0.20, "weight_consensus": 0.15},
-        {"policy_id": "POL-005", "policy_name": "Human Review on Disagreement", "description": "Automatically escalates decision requests to human review whenever AI models produce non-unanimous recommendations.", "is_active": False, "min_confidence_threshold": 0.80, "consensus_required": True, "weight_reliability": 0.25, "weight_confidence": 0.25, "weight_accuracy": 0.25, "weight_consensus": 0.25},
-        {"policy_id": "POL-006", "policy_name": "High Risk -> Human Review", "description": "Forces human-in-the-loop review for any request categorized under High or Critical risk levels.", "is_active": False, "min_confidence_threshold": 0.80, "consensus_required": True, "weight_reliability": 0.30, "weight_confidence": 0.30, "weight_accuracy": 0.20, "weight_consensus": 0.20},
-        {"policy_id": "POL-007", "policy_name": "Minimum Confidence Threshold", "description": "Requires winning decision confidence to exceed 85%, otherwise routes to human review queue.", "is_active": False, "min_confidence_threshold": 0.85, "consensus_required": False, "weight_reliability": 0.25, "weight_confidence": 0.45, "weight_accuracy": 0.15, "weight_consensus": 0.15},
-        {"policy_id": "POL-008", "policy_name": "Consensus Required", "description": "Requires minimum 75% agreement ratio among participating AI models to finalize automated decisions.", "is_active": False, "min_confidence_threshold": 0.75, "consensus_required": True, "weight_reliability": 0.20, "weight_confidence": 0.20, "weight_accuracy": 0.20, "weight_consensus": 0.40},
-        {"policy_id": "POL-009", "policy_name": "Two-Model Agreement", "description": "Mandates that at least two AI models must explicitly agree on the recommendation before approval.", "is_active": False, "min_confidence_threshold": 0.75, "consensus_required": True, "weight_reliability": 0.25, "weight_confidence": 0.25, "weight_accuracy": 0.25, "weight_consensus": 0.25},
-        {"policy_id": "POL-010", "policy_name": "Risk-Based Arbitration", "description": "Applies tiered governance: Low Risk -> Auto approval, Medium -> >80% confidence auto, High -> Consensus, Critical -> Mandatory Human Review.", "is_active": False, "min_confidence_threshold": 0.80, "consensus_required": True, "weight_reliability": 0.30, "weight_confidence": 0.30, "weight_accuracy": 0.25, "weight_consensus": 0.15},
+        {"policy_id": "POL-001", "policy_name": "Majority Voting", "description": "Selects the decision supported by the highest number of participating AI models.", "is_active": False, "min_confidence_threshold": 0.70, "consensus_required": True, "weight_reliability": 0.20, "weight_confidence": 0.20, "weight_accuracy": 0.20, "weight_consensus": 0.25, "weight_cost": 0.15},
+        {"policy_id": "POL-002", "policy_name": "Weighted Confidence", "description": "Aggregates confidence scores for each decision choice and selects the highest cumulative confidence option.", "is_active": False, "min_confidence_threshold": 0.75, "consensus_required": False, "weight_reliability": 0.15, "weight_confidence": 0.45, "weight_accuracy": 0.15, "weight_consensus": 0.10, "weight_cost": 0.15},
+        {"policy_id": "POL-003", "policy_name": "Highest Reliability", "description": "Prioritizes the decision rendered by the AI model with the highest vendor reliability score.", "is_active": False, "min_confidence_threshold": 0.70, "consensus_required": False, "weight_reliability": 0.50, "weight_confidence": 0.15, "weight_accuracy": 0.10, "weight_consensus": 0.10, "weight_cost": 0.15},
+        {"policy_id": "POL-004", "policy_name": "Weighted Reliability + Confidence", "description": "Standard multi-factor algorithm balancing vendor reliability (30%), model confidence (25%), accuracy (15%), consensus (15%), and monetary cost (15%).", "is_active": True, "min_confidence_threshold": 0.75, "consensus_required": False, "weight_reliability": 0.30, "weight_confidence": 0.25, "weight_accuracy": 0.15, "weight_consensus": 0.15, "weight_cost": 0.15},
+        {"policy_id": "POL-005", "policy_name": "Human Review on Disagreement", "description": "Automatically escalates decision requests to human review whenever AI models produce non-unanimous recommendations.", "is_active": False, "min_confidence_threshold": 0.80, "consensus_required": True, "weight_reliability": 0.20, "weight_confidence": 0.20, "weight_accuracy": 0.20, "weight_consensus": 0.25, "weight_cost": 0.15},
+        {"policy_id": "POL-006", "policy_name": "High Risk -> Human Review", "description": "Forces human-in-the-loop review for any request categorized under High or Critical risk levels.", "is_active": False, "min_confidence_threshold": 0.80, "consensus_required": True, "weight_reliability": 0.25, "weight_confidence": 0.25, "weight_accuracy": 0.20, "weight_consensus": 0.15, "weight_cost": 0.15},
+        {"policy_id": "POL-007", "policy_name": "Minimum Confidence Threshold", "description": "Requires winning decision confidence to exceed 85%, otherwise routes to human review queue.", "is_active": False, "min_confidence_threshold": 0.85, "consensus_required": False, "weight_reliability": 0.20, "weight_confidence": 0.40, "weight_accuracy": 0.15, "weight_consensus": 0.10, "weight_cost": 0.15},
+        {"policy_id": "POL-008", "policy_name": "Consensus Required", "description": "Requires minimum 75% agreement ratio among participating AI models to finalize automated decisions.", "is_active": False, "min_confidence_threshold": 0.75, "consensus_required": True, "weight_reliability": 0.20, "weight_confidence": 0.20, "weight_accuracy": 0.15, "weight_consensus": 0.30, "weight_cost": 0.15},
+        {"policy_id": "POL-009", "policy_name": "Two-Model Agreement", "description": "Mandates that at least two AI models must explicitly agree on the recommendation before approval.", "is_active": False, "min_confidence_threshold": 0.75, "consensus_required": True, "weight_reliability": 0.20, "weight_confidence": 0.20, "weight_accuracy": 0.20, "weight_consensus": 0.25, "weight_cost": 0.15},
+        {"policy_id": "POL-010", "policy_name": "Risk-Based Arbitration", "description": "Applies tiered governance: Low Risk -> Auto approval, Medium -> >80% confidence auto, High -> Consensus, Critical -> Mandatory Human Review.", "is_active": False, "min_confidence_threshold": 0.80, "consensus_required": True, "weight_reliability": 0.25, "weight_confidence": 0.25, "weight_accuracy": 0.20, "weight_consensus": 0.15, "weight_cost": 0.15},
     ]
 
     for p in policies_data:
@@ -182,6 +182,14 @@ def seed_database():
             final_decision=arbitration_res["final_decision"],
             winning_model_id=arbitration_res["winning_model_id"],
             winning_model_name=arbitration_res["winning_model"],
+            weighted_score_winner_id=arbitration_res["weighted_score_winner_id"],
+            weighted_score_winner_name=arbitration_res["weighted_score_winner"],
+            policy_selected_winner_id=arbitration_res["policy_selected_winner_id"],
+            policy_selected_winner_name=arbitration_res["policy_selected_winner"],
+            selection_method=arbitration_res["selection_method"],
+            policy_override=arbitration_res["policy_override"],
+            override_reason=arbitration_res["override_reason"],
+            total_cost=arbitration_res["total_cost"],
             arbitration_score=arbitration_res["arbitration_score"],
             confidence=arbitration_res["confidence"],
             risk_level=arbitration_res["risk_level"],
@@ -228,6 +236,12 @@ def seed_database():
             scores=json.dumps(arbitration_res["scores_breakdown"]),
             final_decision=arbitration_res["final_decision"],
             winning_model=arbitration_res["winning_model"],
+            weighted_score_winner=arbitration_res["weighted_score_winner"],
+            policy_selected_winner=arbitration_res["policy_selected_winner"],
+            selection_method=arbitration_res["selection_method"],
+            policy_override=arbitration_res["policy_override"],
+            override_reason=arbitration_res["override_reason"],
+            risk_level=req.risk_level,
             human_review=arbitration_res["human_review_required"],
             reviewer="ArbitrationEngine" if not arbitration_res["human_review_required"] else None,
             reason=arbitration_res["explanation"]

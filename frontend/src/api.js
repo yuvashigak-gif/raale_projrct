@@ -56,6 +56,9 @@ export const api = {
 
   getAnalytics: () => fetchAPI("/analytics"),
 
+  getExperimentResults: () => fetchAPI("/experiment/results"),
+  runExperiment: () => fetchAPI("/experiment/run", { method: "POST" }),
+
   getScenarios: () => fetchAPI("/scenarios"),
   runScenario: (scenarioKey) => fetchAPI(`/scenarios/run/${scenarioKey}`, { method: "POST" }),
 };
